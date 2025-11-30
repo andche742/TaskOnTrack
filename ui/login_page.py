@@ -55,5 +55,5 @@ class LoginPage(ttk.Frame):
         self.app.show_frame("DashboardPage")
 
 
-def on_create(self):
-    self.app.show_frame("DashboardPage")
+    def on_create(self):
+        self.app.show_frame("DashboardPage")
