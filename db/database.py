@@ -19,7 +19,7 @@ class User(Base):
     id = Column(Integer, primary_key=True)
     username = Column(String, unique=True, nullable=False)
     password = Column(String, nullable=False)
-    points = Column(Integer, default=0, nullable=False) # points earned by completing tasks, spend on pet care (feed play pat etc)
+    points = Column(Integer, default=50, nullable=False) # points earned by completing tasks, spend on pet care (feed play pat etc) X/100
 
 class Task(Base):
     __tablename__ = 'tasks'
@@ -37,5 +37,5 @@ class Pet(Base):
     id = Column(Integer, primary_key=True)
     user_id = Column(Integer, ForeignKey('users.id'), nullable=False)
     mood = Column(String, default='happy', nullable=False)  # happy hungry bored etc
-    hunger = Column(Integer, default=100, nullable=False)  # use this to incentivize user to feed
-    bored = Column(Integer, default=100, nullable=False)  # use this to incentivize user to play
+    hunger = Column(Integer, default=100, nullable=False)  # use this to incentivize user to feed X/100
+    bored = Column(Integer, default=100, nullable=False)  # use this to incentivize user to play X/100
