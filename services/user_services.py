@@ -34,5 +34,3 @@ class user_service:
                 session.commit()
                 session.refresh(user)
             return user
-
-    

@@ -1,5 +1,4 @@
 from services.task_services import task_service
-from services.user_services import user_service
     
 class task_controller:
     def create_task(user_id, title, due_date, description=""):

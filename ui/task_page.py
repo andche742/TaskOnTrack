@@ -15,7 +15,6 @@ class TaskPage(ttk.Frame):
         self.columnconfigure(1, weight=1)
         self.rowconfigure(0, weight=1)
 
-
         # MAIN CONTENT AREA
         main = ttk.Frame(self, padding=20)
         main.grid(row=0, column=0, columnspan=2, sticky="nsew")
@@ -105,6 +104,7 @@ class TaskPage(ttk.Frame):
             font=("Segoe UI", 12, "italic"),
         )
 
+        # add, edit, delete buttons
         buttons_row = ttk.Frame(main)
         buttons_row.grid(row=4, column=0, sticky="e", pady=(8, 0))
 
@@ -171,6 +171,8 @@ class TaskPage(ttk.Frame):
     def on_edit_selected(self):
         selected = self.tree.selection()
         if not selected:
+            self.output_text.set("No task selected.")
+            self.output.grid(row=6, column=0, pady=(0, 10))
             return
 
         task_id = int(selected[0])
@@ -223,6 +225,8 @@ class TaskPage(ttk.Frame):
     def on_delete_selected(self):
         selected = self.tree.selection()
         if not selected:
+            self.output_text.set("No task selected.")
+            self.output.grid(row=6, column=0, pady=(0, 10))
             return
 
         task_id = int(selected[0])

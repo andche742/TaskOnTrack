@@ -63,7 +63,7 @@ class DashboardPage(ttk.Frame):
 
         # Today Tasks board
         tasks_board = ttk.LabelFrame(main, text="Today Tasks", padding=10)
-        tasks_board.grid(row=0, column=0, sticky="nsew")
+        tasks_board.grid(row=0, column=0, sticky="nsew", pady=(0, 15))
         tasks_board.rowconfigure(0, weight=1)
         tasks_board.columnconfigure(0, weight=1)
 
@@ -77,11 +77,17 @@ class DashboardPage(ttk.Frame):
         
         self.tasks_container.bind("<Configure>", update_scroll_region)
         
-        self.tasks_canvas.create_window((0, 0), window=self.tasks_container, anchor="nw")
+        canvas_window = self.tasks_canvas.create_window((0, 0), window=self.tasks_container, anchor="nw")
         self.tasks_canvas.configure(yscrollcommand=scrollbar.set)
         
         self.tasks_canvas.grid(row=0, column=0, sticky="nsew")
         scrollbar.grid(row=0, column=1, sticky="ns")
+        
+        # Configure canvas to fill width properly
+        def configure_canvas_width(event):
+            canvas_width = event.width
+            self.tasks_canvas.itemconfig(canvas_window, width=canvas_width)
+        self.tasks_canvas.bind('<Configure>', configure_canvas_width)
         
         self.task_checkboxes = {}
 
@@ -92,12 +98,11 @@ class DashboardPage(ttk.Frame):
             textvariable=self.total_points_var,
             padding=10,
             relief="groove",
-        ).grid(row=1, column=0, sticky="ew", padx=(8, 0))
+        ).grid(row=1, column=0, sticky="ew", pady=(0, 15))
 
         pet_row = ttk.Frame(main)
-        pet_row.grid(row=2, column=0, sticky="ew", pady=(15, 0))
-        pet_row.columnconfigure(0, weight=3)
-        pet_row.columnconfigure(1, weight=1)
+        pet_row.grid(row=2, column=0, sticky="ew")
+        pet_row.columnconfigure(0, weight=1)
 
         self.pet_mood_var = tk.StringVar(value="Pet Mood: normal")
         if hasattr(self.app, 'current_user') and self.app.current_user is not None:
@@ -108,7 +113,7 @@ class DashboardPage(ttk.Frame):
             textvariable=self.pet_mood_var,
             padding=10,
             relief="groove",
-        ).grid(row=0, column=0, sticky="ew", padx=(0, 8))
+        ).grid(row=0, column=0, sticky="ew")
 
         self.load_today_tasks()
 
@@ -207,13 +212,13 @@ class DashboardPage(ttk.Frame):
             user_controller.add_points(self.app.current_user.id, -10)
 
         task_controller.edit_task(task.id, status=new_status)
-        self.total_points_var.set(f"Total Reward Points: {user_controller.get_points(self.app.current_user.id)} points")
+        self.total_points_var.set(f"Reward Points: {user_controller.get_points(self.app.current_user.id)} points")
 
     
     def refresh(self):
         self.load_today_tasks()
         if hasattr(self.app, 'current_user') and self.app.current_user is not None:
-            self.total_points_var.set(f"Total Reward Points: {user_controller.get_points(self.app.current_user.id)} points")
+            self.total_points_var.set(f"Reward Points: {user_controller.get_points(self.app.current_user.id)} points")
         else:
-            self.total_points_var.set("Total Reward Points: 0 points")
+            self.total_points_var.set("Reward Points: 0 points")
 
