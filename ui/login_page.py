@@ -76,6 +76,7 @@ class LoginPage(ttk.Frame):
 
         if success:
             print("Login successful")
+            self.app.current_user = result
             self.app.show_frame("DashboardPage")
         else:
             print("Login failed")
@@ -90,6 +91,7 @@ class LoginPage(ttk.Frame):
 
         if success:
             print("Account creation successful")
+            self.app.current_user = result
             self.app.show_frame("DashboardPage")
         else:
             print("Account creation failed")

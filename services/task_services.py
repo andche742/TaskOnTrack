@@ -2,8 +2,8 @@ from sqlalchemy.orm import Session
 from models.task import Task
 from db.database import get_session
 
-class TaskService:
-    def create_task(self, user_id, title, due_date, description=""):
+class task_service:
+    def create_task(user_id, title, due_date, description=""):
         with get_session() as session:
             new_task = Task(user_id=user_id, title=title, description=description, due_date=due_date, status="incomplete")
 
@@ -12,12 +12,12 @@ class TaskService:
             session.refresh(new_task)
             return new_task
 
-    def get_tasks_by_user(self, user_id):
+    def get_tasks_by_user(user_id):
         with get_session() as session:
             tasks = session.query(Task).filter_by(user_id=user_id).all()
             return tasks
         
-    def delete_task(self, task_id):
+    def delete_task(task_id):
         with get_session() as session:
             task = session.query(Task).filter_by(id=task_id).first()
             if task:
@@ -25,12 +25,12 @@ class TaskService:
                 session.commit()
             return task
         
-    def get_task_by_id(self, task_id):
+    def get_task_by_id(task_id):
         with get_session() as session:
             task = session.query(Task).filter_by(id=task_id).first()
             return task
     
-    def update_task(self, task_id, title=None, description=None, due_date=None, status=None):
+    def update_task(task_id, title=None, description=None, due_date=None, status=None):
         with get_session() as session:
             task = session.query(Task).filter_by(id=task_id).first()
             if task:
