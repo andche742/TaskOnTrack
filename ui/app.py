@@ -33,8 +33,10 @@ class TaskOnTrackApp(tk.Tk):
         container.columnconfigure(0, weight=1)
 
         # Store all page frames here
+        # Store all page frames here
         self.frames = {}
 
+        # Only these four pages for now
         # Only these four pages for now
         for PageClass in (LoginPage, DashboardPage, TaskPage, PetPage):
             page_name = PageClass.__name__
@@ -43,9 +45,11 @@ class TaskOnTrackApp(tk.Tk):
             frame.grid(row=0, column=0, sticky="nsew")
 
         # Show Login first
+        # Show Login first
         self.show_frame("LoginPage")
 
     def show_frame(self, page_name: str):
+        """Raise the page with the given class name."""
         """Raise the page with the given class name."""
         frame = self.frames[page_name]
         frame.tkraise()
