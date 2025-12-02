@@ -1,9 +1,8 @@
 from sqlalchemy.orm import Session
-from models.user import User
-from db.database import get_session
+from db.database import User, get_session
 
-class UserService:
-    def create_user(self, username, password):
+class user_service:
+    def create_user(username, password):
         with get_session() as session:
             existing = session.query(User).filter_by(username=username).first()
 
@@ -17,12 +16,12 @@ class UserService:
             session.refresh(new_user)
             return new_user
     
-    def authenticate_user(self, username, password):
+    def authenticate_user(username, password):
         with get_session() as session:
             user = session.query(User).filter_by(username=username, password=password).first()
             return user
         
-    def get_user_by_id(self, id):
+    def get_user_by_id(id):
         with get_session() as session:
             user = session.query(User).filter_by(id=id).first()
             return user

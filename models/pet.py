@@ -2,9 +2,9 @@ class Pet:
     def __init__(self, pet_id: int, user_id: int, mood: str, bored: int, hunger: int):
         self.id = pet_id
         self.user_id = user_id
-        self.hunger = hunger
-        self.mood = mood  # e.g. 'happy', 'hungry', 'sleepy'
-        self.bored = bored
+        self.hunger = hunger # 0-100
+        self.mood = mood  # e.g. 'happy', 'hungry', 'bored', sad etc
+        self.bored = bored # 0-100
 
     def __repr__(self) -> str:
         return (
