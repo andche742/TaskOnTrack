@@ -1,96 +1,96 @@
 import tkinter as tk
-from tkinter import ttk 
-from controllers.user_controller import user_controller
+from tkinter import ttk, messagebox
+
 
 class LoginPage(ttk.Frame):
     def __init__(self, parent, app):
         super().__init__(parent)
         self.app = app
-        self.user_controller = user_controller
 
-        center = ttk.Frame(self, padding= 40)
-        center.pack(expand=True)
+        # main card centered
+        card = ttk.Frame(self, padding=40)
+        card.pack(expand=True)
+        card.columnconfigure(0, weight=1)  # everything in one column
 
-        # Introduction Label
+        # title
         ttk.Label(
-            center,
-            text= "Welcome to TaskOnTrack!",
-            font= ("Segoe UI", 20, "bold"),
-        ).pack(pady=(0, 5))
+            card,
+            text="Welcome to TaskOnTrack!",
+            font=("Helvetica", 20, "bold"),
+        ).grid(row=0, column=0, pady=(0, 10))
 
         ttk.Label(
-            center,
-            text= "Your tasks, your pace, your progress.",
-            font= ("Segoe UI", 11),
-        ).pack(pady=(0, 20))
+            card,
+            text="Your tasks, your pace, your progress.",
+            font=("Helvetica", 11),
+        ).grid(row=1, column=0, pady=(0, 20))
 
-        # Username Entry
-        ttk.Label(center, text="Username").pack(anchor="w")
-        self.entry_username = ttk.Entry(center, width=30)
-        self.entry_username.pack(pady=(0, 10))
+        # Username label + entry (stacked)
+        ttk.Label(card, text="Username").grid(
+            row=2, column=0, sticky="w", pady=(0, 3)
+        )
+        self.username_var = tk.StringVar()
+        self.username_entry = ttk.Entry(card, textvariable=self.username_var, width=30)
+        self.username_entry.grid(row=3, column=0, sticky="ew", pady=(0, 10))
 
-        # Password Entry
-        ttk.Label(center, text="Password").pack(anchor="w")
-        self.entry_password = ttk.Entry(center, width=30, show="*")
-        self.entry_password.pack(pady=(0, 20))
+        # Password label + entry (stacked)
+        ttk.Label(card, text="Password").grid(
+            row=4, column=0, sticky="w", pady=(0, 3)
+        )
+        self.password_var = tk.StringVar()
+        self.password_entry = ttk.Entry(
+            card, textvariable=self.password_var, show="*", width=30
+        )
+        self.password_entry.grid(row=5, column=0, sticky="ew", pady=(0, 15))
 
-        # Login and Create Account Buttons
-        btn_row = ttk.Frame(center)
-        btn_row.pack()
+        # Buttons row directly under the text boxes
+        btn_row = ttk.Frame(card)
+        btn_row.grid(row=6, column=0, pady=(0, 0))
 
         ttk.Button(
             btn_row,
             text="Login",
+            width=12,
             command=self.on_login,
-        ).grid(row=0, column=0, padx=10)
+        ).grid(row=0, column=0, padx=5)
 
         ttk.Button(
             btn_row,
             text="Create account",
-            command=self.on_create,
-        ).grid(row=0, column=1, padx=10)
+            width=15,
+            command=self.on_create_account,
+        ).grid(row=0, column=1, padx=5)
 
-        self.output_text = tk.StringVar()
-        self.output = ttk.Label(
-            center,
-            textvariable=self.output_text,
-            foreground='red', # Placeholder for error messages
-            font=("Segoe UI", 12, "italic"),
-        ).pack(pady=(10, 0))
+        self.username_entry.focus_set()
 
-    def validate_inputs(self):
-        username = self.entry_username.get()
-        password = self.entry_password.get()
+    # simple validation / navigation handlers
+
+    def _basic_validate(self) -> bool:
+        username = self.username_var.get().strip()
+        password = self.password_var.get().strip()
 
         if not username or not password:
-            self.output_text.set("Please enter both username and password")
-            return None, None
-        return username, password
-    
+            messagebox.showwarning(
+                "Missing information",
+                "Please enter both username and password.",
+            )
+            return False
+        return True
+
     def on_login(self):
-        username, password = self.validate_inputs()
-        if not username:
+        if not self._basic_validate():
+            return
+        self.app.current_user = self.username_var.get().strip()
+        self.app.show_frame("DashboardPage")
+
+    def on_create_account(self):
+        if not self._basic_validate():
             return
 
-        success, result = self.user_controller.login(username, password) 
-
-        if success:
-            print("Login successful")
-            self.app.show_frame("DashboardPage")
-        else:
-            print("Login failed")
-            self.output_text.set(result)
-
-    def on_create(self):
-        username, password = self.validate_inputs()
-        if not username:
-            return
-        
-        success, result = self.user_controller.create_account(username, password)
-
-        if success:
-            print("Account creation successful")
-            self.app.show_frame("DashboardPage")
-        else:
-            print("Account creation failed")
-            self.output_text.set(result)
+        username = self.username_var.get().strip()
+        messagebox.showinfo(
+            "Account created",
+            f"Account for '{username}' created (demo only).\nLogging you in...",
+        )
+        self.app.current_user = username
+        self.app.show_frame("DashboardPage")
