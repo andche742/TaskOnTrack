@@ -1,5 +1,7 @@
 import tkinter as tk
 from tkinter import ttk
+from PIL import Image, ImageTk
+import os
 from controllers.task_controller import task_controller
 from controllers.user_controller import user_controller
 from controllers.pet_controller import pet_controller
@@ -103,17 +105,27 @@ class DashboardPage(ttk.Frame):
         pet_row = ttk.Frame(main)
         pet_row.grid(row=2, column=0, sticky="ew")
         pet_row.columnconfigure(0, weight=1)
+        pet_row.columnconfigure(1, weight=3)
 
+        # Pet image
+        self.pet_image_label = tk.Label(pet_row)
+        self.pet_image_label.grid(row=0, column=0, padx=(0, 10), sticky="w")
+
+        # Pet mood label
         self.pet_mood_var = tk.StringVar(value="Pet Mood: normal")
         if hasattr(self.app, 'current_user') and self.app.current_user is not None:
-            self.pet_mood_var.set(pet_controller.get_mood(self.app.current_user.id))
-
+            mood = pet_controller.get_mood(self.app.current_user.id)
+            self.pet_mood_var.set(f"Pet Mood: {mood}")
+            self.update_pet_image(mood)
+        else:
+            self.update_pet_image("normal")
+        
         ttk.Label(
             pet_row,
             textvariable=self.pet_mood_var,
             padding=10,
             relief="groove",
-        ).grid(row=0, column=0, sticky="ew")
+        ).grid(row=0, column=1, sticky="ew")
 
         self.load_today_tasks()
 
@@ -215,10 +227,47 @@ class DashboardPage(ttk.Frame):
         self.total_points_var.set(f"Reward Points: {user_controller.get_points(self.app.current_user.id)} points")
 
     
+    def update_pet_image(self, mood):
+        mood_to_image = {
+            "normal": "pet_happy.png",
+            "hungry": "pet_hungry.png",
+            "bored": "pet_bored.png",
+            "sad": "pet_sad.png",
+        }
+        
+        image_filename = mood_to_image.get(mood.lower(), "pet_happy.png")
+        
+        current_dir = os.path.dirname(os.path.abspath(__file__))
+        image_path = os.path.join(current_dir, "assets", image_filename)
+        
+        try:
+            image = Image.open(image_path)
+            image = image.resize((250, 250), Image.LANCZOS)
+            photo = ImageTk.PhotoImage(image)
+            
+            self.pet_image_label.configure(image=photo)
+            self.pet_image_label.image = photo 
+        except Exception as e:
+            print(f"Error loading pet image: {e}")
+    
     def refresh(self):
         self.load_today_tasks()
         if hasattr(self.app, 'current_user') and self.app.current_user is not None:
             self.total_points_var.set(f"Reward Points: {user_controller.get_points(self.app.current_user.id)} points")
+            
+            # Update pet stats (decay hunger/boredom over time and update mood)
+            result = pet_controller.update_pet_over_time(self.app.current_user.id)
+            if result[0]:  # Success
+                pet = result[1]
+                mood = pet.mood
+            else:
+                # Pet might not exist or update failed
+                print(f"Pet update failed: {result[1]}")
+                mood = pet_controller.get_mood(self.app.current_user.id)
+            
+            self.pet_mood_var.set(f"Pet Mood: {mood}")
+            self.update_pet_image(mood)
         else:
             self.total_points_var.set("Reward Points: 0 points")
+            self.update_pet_image("normal")
 

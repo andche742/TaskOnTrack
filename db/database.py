@@ -1,5 +1,6 @@
-from sqlalchemy import create_engine, Column, Integer, String, ForeignKey
+from sqlalchemy import create_engine, Column, Integer, String, ForeignKey, DateTime
 from sqlalchemy.orm import sessionmaker, declarative_base
+from datetime import datetime
 
 db_file = "sqlite:///taskontrack.db"
 
@@ -39,3 +40,4 @@ class Pet(Base):
     mood = Column(String, default='happy', nullable=False)  # happy hungry bored etc
     hunger = Column(Integer, default=100, nullable=False)  # use this to incentivize user to feed X/100
     bored = Column(Integer, default=100, nullable=False)  # use this to incentivize user to play X/100
+    last_updated = Column(DateTime, default=datetime.now, nullable=False)  # track when pet was last updated
