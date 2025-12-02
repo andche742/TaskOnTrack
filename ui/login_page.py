@@ -44,9 +44,19 @@ class LoginPage(ttk.Frame):
         )
         self.password_entry.grid(row=5, column=0, sticky="ew", pady=(0, 15))
 
+
+        self.output_text = tk.StringVar()
+        self.output = ttk.Label(
+            card,
+            textvariable=self.output_text,
+            foreground='red',
+            font=("Segoe UI", 12, "italic"),
+        )
+        self.output.grid(row=6, column=0, pady=(0, 10))
+
         # Buttons row directly under the text boxes
         btn_row = ttk.Frame(card)
-        btn_row.grid(row=6, column=0, pady=(0, 0))
+        btn_row.grid(row=7, column=0, pady=(0, 0))
 
         ttk.Button(
             btn_row,
@@ -61,17 +71,10 @@ class LoginPage(ttk.Frame):
             command=self.on_create,
         ).grid(row=0, column=1, padx=10)
 
-        self.output_text = tk.StringVar()
-        self.output = ttk.Label(
-            center,
-            textvariable=self.output_text,
-            foreground='red', # Placeholder for error messages
-            font=("Segoe UI", 12, "italic"),
-        ).pack(pady=(10, 0))
 
     def validate_inputs(self):
-        username = self.entry_username.get()
-        password = self.entry_password.get()
+        username = self.username_var.get()
+        password = self.password_var.get()
 
         if not username or not password:
             self.output_text.set("Please enter both username and password")

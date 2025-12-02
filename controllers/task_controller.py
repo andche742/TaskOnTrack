@@ -1,5 +1,6 @@
 from services.task_services import task_service
-
+from services.user_services import user_service
+    
 class task_controller:
     def create_task(user_id, title, due_date, description=""):
         try:         
@@ -14,6 +15,13 @@ class task_controller:
             return True, tasks if tasks else []
         except Exception as e:
             return False, "Failed to load tasks"
+    
+    def get_tasks_for_today(user_id):
+        try:
+            tasks = task_service.get_tasks_for_today(user_id)
+            return True, tasks if tasks else []
+        except Exception as e:
+            return False, f"Failed to load tasks for today: {str(e)}"
     
     def delete_task(task_id):
         try:

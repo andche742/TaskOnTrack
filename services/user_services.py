@@ -25,3 +25,14 @@ class user_service:
         with get_session() as session:
             user = session.query(User).filter_by(id=id).first()
             return user
+
+    def add_points(user_id, points):
+        with get_session() as session:
+            user = session.query(User).filter_by(id=user_id).first()
+            if user:
+                user.points += points
+                session.commit()
+                session.refresh(user)
+            return user
+
+    

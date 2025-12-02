@@ -1,7 +1,7 @@
 from models.pet import Pet
 from db.database import get_session
 
-class PetService:
+class pet_service:
     def create_pet(self, user_id, name, type):
         with get_session() as session:
             new_pet = Pet(user_id=user_id, name=name, type=type)
@@ -29,3 +29,4 @@ class PetService:
                 session.commit()
                 session.refresh(pet)
             return pet
+

@@ -21,6 +21,9 @@ class TaskOnTrackApp(tk.Tk):
         self.style = ttk.Style(self)
         self.current_theme = "light"
         self._apply_theme()  # set initial colors
+        
+        # Initialize current_user to None (will be set after login)
+        self.current_user = None
 
         # Main container that holds all pages
         container = ttk.Frame(self)
@@ -46,6 +49,9 @@ class TaskOnTrackApp(tk.Tk):
         """Raise the page with the given class name."""
         frame = self.frames[page_name]
         frame.tkraise()
+        
+        if hasattr(frame, 'refresh'):
+            frame.refresh()
 
     # THEME CONTROL
 

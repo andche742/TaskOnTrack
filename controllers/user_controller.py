@@ -13,4 +13,11 @@ class user_controller:
         except ValueError:
             return False, "Username already exists"
 
-    
+    def get_points(user_id):
+        user = user_service.get_user_by_id(user_id)
+        return user.points
+
+    def add_points(user_id, points):
+        user = user_service.add_points(user_id, points)
+        return user.points
+        

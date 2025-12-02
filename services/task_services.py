@@ -1,6 +1,5 @@
 from sqlalchemy.orm import Session
-from models.task import Task
-from db.database import get_session
+from db.database import Task,get_session
 
 class task_service:
     def create_task(user_id, title, due_date, description=""):
@@ -15,6 +14,13 @@ class task_service:
     def get_tasks_by_user(user_id):
         with get_session() as session:
             tasks = session.query(Task).filter_by(user_id=user_id).all()
+            return tasks
+    
+    def get_tasks_for_today(user_id):
+        from datetime import datetime
+        today_date = datetime.now().strftime("%m-%d-%Y")
+        with get_session() as session:
+            tasks = session.query(Task).filter_by(user_id=user_id, due_date=today_date).all()
             return tasks
         
     def delete_task(task_id):
