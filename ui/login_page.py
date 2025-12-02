@@ -8,41 +8,52 @@ class LoginPage(ttk.Frame):
         self.app = app
         self.user_controller = user_controller
 
-        center = ttk.Frame(self, padding= 40)
-        center.pack(expand=True)
+        # main card centered
+        card = ttk.Frame(self, padding=40)
+        card.pack(expand=True)
+        card.columnconfigure(0, weight=1)  # everything in one column
 
-        # Introduction Label
+        # title
         ttk.Label(
-            center,
-            text= "Welcome to TaskOnTrack!",
-            font= ("Segoe UI", 20, "bold"),
-        ).pack(pady=(0, 5))
+            card,
+            text="Welcome to TaskOnTrack!",
+            font=("Helvetica", 20, "bold"),
+        ).grid(row=0, column=0, pady=(0, 10))
 
         ttk.Label(
-            center,
-            text= "Your tasks, your pace, your progress.",
-            font= ("Segoe UI", 11),
-        ).pack(pady=(0, 20))
+            card,
+            text="Your tasks, your pace, your progress.",
+            font=("Helvetica", 11),
+        ).grid(row=1, column=0, pady=(0, 20))
 
-        # Username Entry
-        ttk.Label(center, text="Username").pack(anchor="w")
-        self.entry_username = ttk.Entry(center, width=30)
-        self.entry_username.pack(pady=(0, 10))
+        # Username label + entry (stacked)
+        ttk.Label(card, text="Username").grid(
+            row=2, column=0, sticky="w", pady=(0, 3)
+        )
+        self.username_var = tk.StringVar()
+        self.username_entry = ttk.Entry(card, textvariable=self.username_var, width=30)
+        self.username_entry.grid(row=3, column=0, sticky="ew", pady=(0, 10))
 
-        # Password Entry
-        ttk.Label(center, text="Password").pack(anchor="w")
-        self.entry_password = ttk.Entry(center, width=30, show="*")
-        self.entry_password.pack(pady=(0, 20))
+        # Password label + entry (stacked)
+        ttk.Label(card, text="Password").grid(
+            row=4, column=0, sticky="w", pady=(0, 3)
+        )
+        self.password_var = tk.StringVar()
+        self.password_entry = ttk.Entry(
+            card, textvariable=self.password_var, show="*", width=30
+        )
+        self.password_entry.grid(row=5, column=0, sticky="ew", pady=(0, 15))
 
-        # Login and Create Account Buttons
-        btn_row = ttk.Frame(center)
-        btn_row.pack()
+        # Buttons row directly under the text boxes
+        btn_row = ttk.Frame(card)
+        btn_row.grid(row=6, column=0, pady=(0, 0))
 
         ttk.Button(
             btn_row,
             text="Login",
+            width=12,
             command=self.on_login,
-        ).grid(row=0, column=0, padx=10)
+        ).grid(row=0, column=0, padx=5)
 
         ttk.Button(
             btn_row,
