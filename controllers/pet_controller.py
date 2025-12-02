@@ -26,3 +26,34 @@ class pet_controller:
             return True, pet
         except Exception as e:
             return False, str(e)
+    
+    def update_pet_stats(user_id, hunger_change=None, boredom_change=None):
+        """Update pet hunger/boredom and recalculate mood based on new stats."""
+        try:
+            pet = pet_service.get_pet_by_user(user_id)
+            if not pet:
+                return False, "Pet not found"
+            
+            new_hunger = pet.hunger
+            new_bored = pet.bored
+            
+            if hunger_change is not None:
+                new_hunger = max(0, min(100, pet.hunger + hunger_change))
+            
+            if boredom_change is not None:
+                new_bored = max(0, min(100, pet.bored + boredom_change))
+            
+            # Update pet stats
+            updated_pet = pet_service.update_pet(
+                pet.id,
+                hunger=new_hunger,
+                bored=new_bored
+            )
+            
+            # Recalculate mood based on new stats
+            new_mood = pet_service._calculate_mood_from_stats(new_hunger, new_bored)
+            updated_pet = pet_service.update_pet(pet.id, mood=new_mood)
+            
+            return True, updated_pet
+        except Exception as e:
+            return False, str(e)
