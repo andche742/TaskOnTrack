@@ -6,25 +6,21 @@ git clone https://github.com/andche742/TaskOnTrack.git
 cd TaskOnTrack```
 
 2. Create venv (optional)
-```# mac/linux
-python3 -m venv venv
-source venv/bin/activate
-```
-```# windows
-python -m venv venv
-venv/Scripts/activate
-```
+mac
+```python3 -m venv venv
+source venv/bin/activate```
+windows
+```python -m venv venv
+venv/Scripts/activate```
 
 3. install dependencies
 ```pip install -r requirements.txt```
 
 4. run application
-```# mac/linux
-python3 main.py
-```
-```# windows
-python main.py
-```
+mac/linux
+```python3 main.py```
+windows
+```python main.py```
 
 # Features
 stay on task to keep your pet happy!
