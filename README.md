@@ -1,33 +1,54 @@
 # How to Run
 
-1. Clone Repo
-```
+## 1. Clone the Repository
+```bash
 git clone https://github.com/andche742/TaskOnTrack.git
-cd TaskOnTrack```
+cd TaskOnTrack
+```
 
-2. Create venv (optional)
-mac
-```python3 -m venv venv
-source venv/bin/activate```
-windows
-```python -m venv venv
-venv/Scripts/activate```
+## 2. Create a Virtual Environment (Optional)
 
-3. install dependencies
-```pip install -r requirements.txt```
+### macOS / Linux
+```bash
+python3 -m venv venv
+source venv/bin/activate
+```
 
-4. run application
-mac/linux
-```python3 main.py```
-windows
-```python main.py```
+### Windows
+```bash
+python -m venv venv
+venv\Scripts\activate
+```
+
+## 3. Install Dependencies
+```bash
+pip install -r requirements.txt
+```
+
+## 4. Run the Application
+
+### macOS / Linux
+```bash
+python3 main.py
+```
+
+### Windows
+```bash
+python main.py
+```
 
 # Features
-stay on task to keep your pet happy!
-create, edit, delete tasks
 
-each task nets you 10 points to spend
-you can feed (1o pts), pat (5 pts), or play (10 pts) with your pet
+- Stay on task to keep your pet happy!
+- Create, edit, and delete tasks.
+- Each completed task earns **10 points**.
+- Spend points to interact with your pet:
+  - **Feed** (10 pts)
+  - **Pat** (5 pts)
+  - **Play** (10 pts)
 
-feed your pet 2 times a day to keep them fed 
-pat 5 times, or play 2 times a day (or combination of the two) to keep them entertained
+### Pet Care Requirements
+- Feed your pet **twice per day** to keep them fed.
+- Keep them entertained by:
+  - Patting **5 times**, **or**
+  - Playing **2 times**, **or a combination** of both.
