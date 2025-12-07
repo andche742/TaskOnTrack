@@ -15,12 +15,12 @@ class TaskPage(ttk.Frame):
         self.columnconfigure(1, weight=1)
         self.rowconfigure(0, weight=1)
 
-        # MAIN CONTENT AREA
+        # main
         main = ttk.Frame(self, padding=20)
         main.grid(row=0, column=0, columnspan=2, sticky="nsew")
         main.columnconfigure(0, weight=1)
 
-        # Title row
+        # title
         title_row = ttk.Frame(main)
         title_row.grid(row=0, column=0, sticky="ew", pady=(0, 10))
 
@@ -30,13 +30,14 @@ class TaskPage(ttk.Frame):
             font=("Helvetica", 18, "bold"),
         ).pack(side="left")
 
+        # home button
         ttk.Button(
             title_row,
             text="Back to Dashboard",
             command=lambda: app.show_frame("DashboardPage"),
         ).pack(side="right")
 
-        # Task table 
+        # task table
         table_frame = ttk.Frame(main)
         table_frame.grid(row=1, column=0, sticky="nsew")
         table_frame.columnconfigure(0, weight=1)
@@ -56,7 +57,6 @@ class TaskPage(ttk.Frame):
         self.tree.heading("description", text="Description")
         self.tree.heading("status", text="Status")
 
-        # column widths (can tweak later)
         self.tree.column("id", width=50, anchor="center")
         self.tree.column("name", width=210)
         self.tree.column("date", width=100, anchor="center")
@@ -73,17 +73,15 @@ class TaskPage(ttk.Frame):
         self.tree.configure(yscroll=scrollbar.set)
         scrollbar.grid(row=0, column=1, sticky="ns")
 
-        # Add Task form 
+        # add task form
         form_frame = ttk.LabelFrame(main, padding=10)
         form_frame.grid(row=3, column=0, sticky="ew", pady=(5, 0))
         form_frame.columnconfigure(1, weight=1)
 
-        # Task Name
         ttk.Label(form_frame, text="Task Name").grid(row=0, column=0, sticky="w", pady=3)
         self.name_entry = ttk.Entry(form_frame)
         self.name_entry.grid(row=0, column=1, sticky="ew", pady=3)
 
-        # Date
         ttk.Label(form_frame, text="Date").grid(row=1, column=0, sticky="w", pady=3)
         self.date_entry = DateEntry(
             form_frame,
@@ -91,7 +89,6 @@ class TaskPage(ttk.Frame):
         )
         self.date_entry.grid(row=1, column=1, sticky="w", pady=3)
 
-        # Desc
         ttk.Label(form_frame, text="Description").grid(row=2, column=0, sticky="w", pady=3)
         self.description_entry = ttk.Entry(form_frame)
         self.description_entry.grid(row=2, column=1, sticky="ew", pady=3)
@@ -131,9 +128,7 @@ class TaskPage(ttk.Frame):
         ).grid(row=0, column=2, padx=5)
 
 
-    #  Handlers 
     def on_save(self):
-        """Add a new task from the form into the table (for now, in memory)."""
         name = self.name_entry.get().strip()
         date = self.date_entry.get().strip()
         description = self.description_entry.get().strip()

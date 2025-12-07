@@ -8,10 +8,9 @@ class LoginPage(ttk.Frame):
         self.app = app
         self.user_controller = user_controller
 
-        # main card centered
-        card = ttk.Frame(self, padding=40)
+        card = ttk.Frame(self, padding=40) # main content
         card.pack(expand=True)
-        card.columnconfigure(0, weight=1)  # everything in one column
+        card.columnconfigure(0, weight=1)
 
         # title
         ttk.Label(
@@ -26,7 +25,7 @@ class LoginPage(ttk.Frame):
             font=("Helvetica", 11),
         ).grid(row=1, column=0, pady=(0, 20))
 
-        # Username label + entry (stacked)
+        # username entry
         ttk.Label(card, text="Username").grid(
             row=2, column=0, sticky="w", pady=(0, 3)
         )
@@ -34,7 +33,7 @@ class LoginPage(ttk.Frame):
         self.username_entry = ttk.Entry(card, textvariable=self.username_var, width=30)
         self.username_entry.grid(row=3, column=0, sticky="ew", pady=(0, 10))
 
-        # Password label + entry (stacked)
+        # password entry
         ttk.Label(card, text="Password").grid(
             row=4, column=0, sticky="w", pady=(0, 3)
         )
@@ -44,7 +43,7 @@ class LoginPage(ttk.Frame):
         )
         self.password_entry.grid(row=5, column=0, sticky="ew", pady=(0, 15))
 
-
+        # output for error messages
         self.output_text = tk.StringVar()
         self.output = ttk.Label(
             card,
@@ -54,7 +53,7 @@ class LoginPage(ttk.Frame):
         )
         self.output.grid(row=6, column=0, pady=(0, 10))
 
-        # Buttons row directly under the text boxes
+        # buttons
         btn_row = ttk.Frame(card)
         btn_row.grid(row=7, column=0, pady=(0, 0))
 

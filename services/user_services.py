@@ -16,7 +16,7 @@ class user_service:
             session.refresh(new_user)
             return new_user
     
-    def authenticate_user(username, password):
+    def authenticate_user(username, password): # return user if credentials correct
         with get_session() as session:
             user = session.query(User).filter_by(username=username, password=password).first()
             return user

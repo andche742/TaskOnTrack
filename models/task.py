@@ -11,11 +11,11 @@ class Task:
         status: str,
     ):
         self.id = task_id
-        self.user_id = user_id
+        self.user_id = user_id  # id of the user who owns the task
         self.title = title
         self.description = description
         self.due_date = due_date   
-        self.status = status       
+        self.status = status  # incomplete, complete
 
     def __repr__(self) -> str:
         return (

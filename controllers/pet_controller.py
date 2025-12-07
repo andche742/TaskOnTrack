@@ -28,7 +28,6 @@ class pet_controller:
             return False, str(e)
     
     def update_pet_stats(user_id, hunger_change=None, boredom_change=None):
-        """Update pet hunger/boredom and recalculate mood based on new stats."""
         try:
             pet = pet_service.get_pet_by_user(user_id)
             if not pet:
@@ -43,14 +42,12 @@ class pet_controller:
             if boredom_change is not None:
                 new_bored = max(0, min(100, pet.bored + boredom_change))
             
-            # Update pet stats
             updated_pet = pet_service.update_pet(
                 pet.id,
                 hunger=new_hunger,
                 bored=new_bored
             )
             
-            # Recalculate mood based on new stats
             new_mood = pet_service._calculate_mood_from_stats(new_hunger, new_bored)
             updated_pet = pet_service.update_pet(pet.id, mood=new_mood)
             

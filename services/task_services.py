@@ -4,19 +4,19 @@ from db.database import Task,get_session
 class task_service:
     def create_task(user_id, title, due_date, description=""):
         with get_session() as session:
-            new_task = Task(user_id=user_id, title=title, description=description, due_date=due_date, status="incomplete")
+            new_task = Task(user_id=user_id, title=title, description=description, due_date=due_date, status="incomplete") # default task to incomplete
 
             session.add(new_task)
             session.commit()
             session.refresh(new_task)
             return new_task
 
-    def get_tasks_by_user(user_id):
+    def get_tasks_by_user(user_id): # to display all tasks
         with get_session() as session:
             tasks = session.query(Task).filter_by(user_id=user_id).all()
             return tasks
     
-    def get_tasks_for_today(user_id):
+    def get_tasks_for_today(user_id): # to display today's tasks
         from datetime import datetime
         today_date = datetime.now().strftime("%m-%d-%Y")
         with get_session() as session:
@@ -36,7 +36,7 @@ class task_service:
             task = session.query(Task).filter_by(id=task_id).first()
             return task
     
-    def update_task(task_id, title=None, description=None, due_date=None, status=None):
+    def update_task(task_id, title=None, description=None, due_date=None, status=None): # for editing tasks
         with get_session() as session:
             task = session.query(Task).filter_by(id=task_id).first()
             if task:

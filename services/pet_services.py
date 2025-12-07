@@ -1,10 +1,10 @@
 from db.database import get_session, Pet
-from datetime import datetime, timedelta
+from datetime import datetime
 
 class pet_service:
-    def create_pet(user_id, name, type):
+    def create_pet(user_id, name):
         with get_session() as session:
-            new_pet = Pet(user_id=user_id, name=name, type=type, last_updated=datetime.now())
+            new_pet = Pet(user_id=user_id, name=name, last_updated=datetime.now()) # init pet with curr time
 
             session.add(new_pet)
             session.commit()
@@ -23,9 +23,9 @@ class pet_service:
                 if mood is not None:
                     pet.mood = mood
                 if hunger is not None:
-                    pet.hunger = max(0, min(100, hunger))
+                    pet.hunger = max(0, min(100, hunger)) # clamp between 0 and 100
                 if bored is not None:
-                    pet.bored = max(0, min(100, bored))  # Clamp between 0-100
+                    pet.bored = max(0, min(100, bored)) # clamp between 0 and 100
                 session.commit()
                 session.refresh(pet)
             return pet
@@ -35,13 +35,13 @@ class pet_service:
         with get_session() as session:
             pet = session.query(Pet).filter_by(user_id=user_id).first()
             if not pet:
-                # Auto-create a default pet if one doesn't exist
+                # create pet if user has none
                 print(f"Creating default pet for user_id {user_id}")
                 pet = Pet(user_id=user_id, mood="normal", hunger=100, bored=100, last_updated=datetime.now())
                 session.add(pet)
                 session.commit()
                 session.refresh(pet)
-                return pet  # Return immediately since it's brand new
+                return pet
             
             now = datetime.now()
             
@@ -49,10 +49,10 @@ class pet_service:
             if last_update is None:
                 last_update = now
             
-            time_elapsed = (now - last_update).total_seconds()
+            time_elapsed = (now - last_update).total_seconds()/3600 # in hours
             
-            hunger_decay_per_hour = 5  # 5 points per hour
-            boredom_decay_per_hour = 3  # 3 points per hour
+            hunger_decay_per_hour = 4  # decay 4 points per hour (96 points per day)
+            boredom_decay_per_hour = 4  # decay 4 points per hour (96 points per day)
             
             hunger_decay = hunger_decay_per_hour * time_elapsed
             boredom_decay = boredom_decay_per_hour * time_elapsed

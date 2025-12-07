@@ -11,13 +11,12 @@ class DashboardPage(ttk.Frame):
         super().__init__(parent)
         self.app = app
 
-        # --- layout grid for this page ---
+        # layout grid
         self.columnconfigure(0, weight=0)   # side nav
         self.columnconfigure(1, weight=1)   # main content
         self.rowconfigure(0, weight=1)
 
-        # SIDE NAV (left)
-
+        # side nav
         side_nav = ttk.Frame(self, padding=(20, 20))
         side_nav.grid(row=0, column=0, sticky="nsw")
 
@@ -27,7 +26,7 @@ class DashboardPage(ttk.Frame):
             font=("Helvetica", 18, "bold"),
         ).pack(anchor="w", pady=(0, 20))
 
-        # Menu buttons
+        # nav buttons
         ttk.Button(
             side_nav,
             text="Home",
@@ -57,19 +56,18 @@ class DashboardPage(ttk.Frame):
         ).pack(anchor="w", pady=4)
 
 
-        # MAIN CONTENT AREA
+        # main content
    
         main = ttk.Frame(self, padding=(10, 20, 20, 20))
         main.grid(row=0, column=1, sticky="nsew")
         main.columnconfigure(0, weight=1)
 
-        # Today Tasks board
+        # todays tasks
         tasks_board = ttk.LabelFrame(main, text="Today Tasks", padding=10)
         tasks_board.grid(row=0, column=0, sticky="nsew", pady=(0, 15))
         tasks_board.rowconfigure(0, weight=1)
         tasks_board.columnconfigure(0, weight=1)
 
-        # Scrollable frame for tasks checklist
         self.tasks_canvas = tk.Canvas(tasks_board, highlightthickness=0)
         scrollbar = ttk.Scrollbar(tasks_board, orient="vertical", command=self.tasks_canvas.yview)
         self.tasks_container = ttk.Frame(self.tasks_canvas)
@@ -85,7 +83,6 @@ class DashboardPage(ttk.Frame):
         self.tasks_canvas.grid(row=0, column=0, sticky="nsew")
         scrollbar.grid(row=0, column=1, sticky="ns")
         
-        # Configure canvas to fill width properly
         def configure_canvas_width(event):
             canvas_width = event.width
             self.tasks_canvas.itemconfig(canvas_window, width=canvas_width)
@@ -107,11 +104,11 @@ class DashboardPage(ttk.Frame):
         pet_row.columnconfigure(0, weight=1)
         pet_row.columnconfigure(1, weight=3)
 
-        # Pet image
-        self.pet_image_label = tk.Label(pet_row)
+        # pet image
+        self.pet_image_label = ttk.Label(pet_row)
         self.pet_image_label.grid(row=0, column=0, padx=(0, 10), sticky="w")
 
-        # Pet mood label
+        # pet mood
         self.pet_mood_var = tk.StringVar(value="Pet Mood: normal")
         if hasattr(self.app, 'current_user') and self.app.current_user is not None:
             mood = pet_controller.get_mood(self.app.current_user.id)
@@ -129,16 +126,11 @@ class DashboardPage(ttk.Frame):
 
         self.load_today_tasks()
 
-    #  Handlers
-
     def open_settings_dialog(self):
-        """Open a small popup window for theme settings."""
         win = tk.Toplevel(self)
         win.title("Settings")
-        win.transient(self.winfo_toplevel())  # tie to main window
-        win.grab_set()  # make it modal-ish
-
-        # Set a fixed small size
+        win.transient(self.winfo_toplevel()) 
+        win.grab_set() 
         win.geometry("300x160")
 
         container = ttk.Frame(win, padding=20)
@@ -150,7 +142,7 @@ class DashboardPage(ttk.Frame):
             font=("Helvetica", 12, "bold"),
         ).pack(anchor="w", pady=(0, 10))
 
-        # Buttons row
+        # light/dark buttons
         row = ttk.Frame(container)
         row.pack(anchor="w", pady=(0, 10))
 
@@ -175,7 +167,6 @@ class DashboardPage(ttk.Frame):
         ).pack(anchor="w", pady=(10, 0))
 
     def _set_theme_and_close(self, win, mode: str):
-        """Helper: change theme and close the popup."""
         self.app.set_theme(mode)
         win.destroy()
     
@@ -212,7 +203,7 @@ class DashboardPage(ttk.Frame):
         self.tasks_canvas.update_idletasks()
         self.tasks_canvas.configure(scrollregion=self.tasks_canvas.bbox("all"))
     
-    def _on_task_toggle(self, task, checked_var):
+    def _on_task_toggle(self, task, checked_var): # called when a task checkbox is toggled
         if not hasattr(self.app, 'current_user') or self.app.current_user is None:
             return
             
@@ -255,13 +246,11 @@ class DashboardPage(ttk.Frame):
         if hasattr(self.app, 'current_user') and self.app.current_user is not None:
             self.total_points_var.set(f"Reward Points: {user_controller.get_points(self.app.current_user.id)} points")
             
-            # Update pet stats (decay hunger/boredom over time and update mood)
             result = pet_controller.update_pet_over_time(self.app.current_user.id)
             if result[0]:  # Success
                 pet = result[1]
                 mood = pet.mood
             else:
-                # Pet might not exist or update failed
                 print(f"Pet update failed: {result[1]}")
                 mood = pet_controller.get_mood(self.app.current_user.id)
             
