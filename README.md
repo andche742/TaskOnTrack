@@ -6,13 +6,11 @@ git clone https://github.com/andche742/TaskOnTrack.git
 cd TaskOnTrack```
 
 2. Create venv (optional)
-```
-# mac/linux
+```# mac/linux
 python3 -m venv venv
 source venv/bin/activate
 ```
-```
-# windows
+```# windows
 python -m venv venv
 venv/Scripts/activate
 ```
@@ -21,12 +19,10 @@ venv/Scripts/activate
 ```pip install -r requirements.txt```
 
 4. run application
-```
-# mac/linux
+```# mac/linux
 python3 main.py
 ```
-```
-# windows
+```# windows
 python main.py
 ```
 
